@@ -15,7 +15,7 @@ pipeline{
         }
         stage('Checkout from Git'){
             steps{
-                git branch: 'main', url: 'https://github.com/CNaveen0101/Netflix-clone.git'
+                git branch: 'main', url: 'https://github.com/Tajalsir-Merghani/Netflix-clone.git'
             }
         }
         stage("Sonarqube Analysis "){
@@ -52,22 +52,22 @@ pipeline{
         stage("Docker Build & Push"){
             steps{
                 script{
-                   withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){   
-                       sh "docker build --build-arg TMDB_V3_API_KEY=7388e999dce9bd72d8a0bb287dc9ff3e -t netflix ."
-                       sh "docker tag netflix naveen0101/netflix:latest "
-                       sh "docker push naveen0101/netflix:latest "
+                   withDockerRegistry(credentialsId: 'dochubcred', toolName: 'dochubcred'){   
+                       sh "docker build --build-arg TMDB_V3_API_KEY=1292640d8ce7df23d535e4f355ea5d7e -t netflix ."
+                       sh "docker tag netflix tajooj/netflix:latest "
+                       sh "docker push tajooj/netflix:latest "
                     }
                 }
             }
         }
         stage("TRIVY"){
             steps{
-                sh "trivy image naveen0101/netflix:latest > trivyimage.txt" 
+                sh "trivy image tajooj/netflix:latest > trivyimage.txt" 
             }
         }
         stage('Deploy to container'){
             steps{
-                sh 'docker run -d --name netflix -p 8081:80 naveen0101/netflix:latest'
+                sh 'docker run -d --name netflix -p 8081:80 tajooj/netflix:latest'
             }
         }
     }
@@ -78,7 +78,7 @@ pipeline{
             body: "Project: ${env.JOB_NAME}<br/>" +
                 "Build Number: ${env.BUILD_NUMBER}<br/>" +
                 "URL: ${env.BUILD_URL}<br/>",
-            to: 'kumarnaveen3098@gmail.com',
+            to: 'tajooj45@gmail.com',
             attachmentsPattern: 'trivyfs.txt'
            }
         }
