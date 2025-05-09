@@ -29,7 +29,7 @@ pipeline {
                             -Dsonar.projectKey=Netflix \
                             -Dsonar.projectName=Netflix \
                             -Dsonar.sources=. \
-                            -Dsonar.host.url=http://your-sonarqube-server:9000 \
+                            -Dsonar.host.url=http://54.166.131.240:9000 \
                             -Dsonar.login=${SONAR_TOKEN}
                         """
                     }
