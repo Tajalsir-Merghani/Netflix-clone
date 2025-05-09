@@ -21,8 +21,8 @@ pipeline{
         stage("Sonarqube Analysis "){
             steps{
                 withSonarQubeEnv('sonar-server') {
-                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=Netflix \
-                    -Dsonar.projectKey=Netflix '''
+                    sh '' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=Netflix \
+                    -Dsonar.projectKey=Netflix ''
                 }
             }
         }
@@ -52,7 +52,7 @@ pipeline{
         stage("Docker Build & Push"){
             steps{
                 script{
-                   withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){   
+                   withDockerRegistry(credentialsId: 'dochubcred', toolName: 'dochubcred'){   
                        sh "docker build --build-arg TMDB_V3_API_KEY=1292640d8ce7df23d535e4f355ea5d7e -t netflix ."
                        sh "docker tag netflix tajooj/netflix:latest "
                        sh "docker push tajooj/netflix:latest "
