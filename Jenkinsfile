@@ -23,16 +23,13 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('sonar-server') {
-                    withCredentials([string(credentialsId: 'Sonar-token', variable: 'SONAR_TOKEN')]) {
-                        sh """
-                            ${SCANNER_HOME}/bin/sonar-scanner \
-                            -Dsonar.projectKey=Netflix \
-                            -Dsonar.projectName=Netflix \
-                            -Dsonar.sources=. \
-                            -Dsonar.host.url=http://54.166.131.240:9000 \
-                            -Dsonar.login=${SONAR_TOKEN}
-                        """
-                    }
+                    sh """
+                        ${SCANNER_HOME}/bin/sonar-scanner \
+                        -Dsonar.projectKey=Netflix \
+                        -Dsonar.projectName=Netflix \
+                        -Dsonar.sources=. \
+                        -Dsonar.login=${env.SONAR_AUTH_TOKEN}
+                    """
                 }
             }
         }
@@ -40,7 +37,7 @@ pipeline {
         stage('Quality Gate') {
             steps {
                 script {
-                    waitForQualityGate abortPipeline: false, credentialsId: 'squ_be759ab3994fbe058b68e0c28bc5d1b7249d3544'
+                    waitForQualityGate abortPipeline: false, credentialsId: 'sonar-server'
                 }
             }
         }
